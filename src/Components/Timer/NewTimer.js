@@ -4,6 +4,7 @@ import './NewTimer.css'
 // Sounds
 import ClickSoundM from './../../Sounds/click.mp3'
 import EndSoundM from './../../Sounds/stopTime.mp3'
+import CheckpointM from './../../Sounds/beep.mp3'
 
 
 
@@ -42,14 +43,14 @@ function NewTimer() {
         
         
     
-    
-        
-        if (intervalActual === intervalSeconds.value) {
-    
-            EndSound.play()
-    
+        if (inputIntervalSee.current.value == '0') {
+
+            inputIntervalSee.current.value = inputInterval.current.value
+            checkpointSound.play()
+
         }
-    
+
+        
     }
     
     
@@ -69,19 +70,26 @@ function NewTimer() {
             setPause(false)
             mainButton.current.innerHTML = 'PAUSE';
 
+            if (checkpoint) {
+    
+                inputIntervalSee.current.setAttribute('style', 'display: block;')
+                inputInterval.current.setAttribute('style', 'display: none;')
+                
+                IntervalText.current.innerHTML = 'Next point in'
 
-            inputIntervalSee.current.setAttribute('style', 'display: block;')
-            inputInterval.current.setAttribute('style', 'display: none;')
-            
-            IntervalText.current.innerHTML = 'Next point in'
+            }
             
             inputMinutes.current.disabled = true;
             inputSecs.current.disabled = true;
             
         } else {
-            
-            inputIntervalSee.current.setAttribute('style', 'display: none;')
-            inputInterval.current.setAttribute('style', 'display: block;')
+
+            if (checkpoint) {
+                
+                inputIntervalSee.current.setAttribute('style', 'display: none;')
+                inputInterval.current.setAttribute('style', 'display: block;')
+
+            }
             
             IntervalText.current.innerHTML = 'Interval'
 
@@ -154,13 +162,7 @@ function NewTimer() {
 
                 inputIntervalSee.current.value -= 1
 
-            } else {
-
-                inputIntervalSee.current.value = inputInterval.current.value
-                EndSound.play()
-
             }
-
         }
 
         
@@ -404,6 +406,7 @@ function NewTimer() {
 
     var clickSound = new Audio(ClickSoundM)
     var EndSound = new Audio(EndSoundM)
+    var checkpointSound = new Audio(CheckpointM)
 
     var actualTimeMins;
     var actualTimeSecs;
